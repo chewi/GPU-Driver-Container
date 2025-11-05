@@ -65,15 +65,6 @@ _relocate_flatcar() {
             --set-rpath /host-lib/usr/lib64 \
             "${host_tool}"
     done
-
-    pushd /lib/modules/${KERNEL_VERSION}/build
-    for i in ../source/include/*; do
-        ln -s ../$i include/
-    done
-    for i in ../source/arch/x86/include/*; do
-        ln -s ../../../$i arch/x86/include/
-    done
-    popd
 }
 
 _is_flatcar() {
