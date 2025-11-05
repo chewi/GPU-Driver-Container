@@ -1,5 +1,5 @@
-ARG CUDA_VERSION=12.3.1
-FROM nvidia/cuda:${CUDA_VERSION}-base-ubuntu22.04 as build
+ARG CUDA_VERSION=13.0.1
+FROM nvidia/cuda:${CUDA_VERSION}-base-ubuntu24.04 as build
 #FROM mediadepot/flatcar-developer:3874.0.0
 
 ENV NVIDIA_VISIBLE_DEVICES=void
@@ -33,7 +33,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then dpkg --add-architecture i386 ; fi && \
         build-essential \
         ca-certificates \
         curl \
-        gcc-12 \
+        gcc-14 \
         gnupg2 \
         jq \
         kmod \
@@ -51,7 +51,7 @@ RUN curl -fsSL -o /usr/local/bin/donkey https://github.com/3XX0/donkey/releases/
 
 #ARG BASE_URL=http://us.download.nvidia.com/XFree86/Linux-x86_64
 ARG BASE_URL=https://us.download.nvidia.com/tesla
-ARG DRIVER_VERSION=535.161.07
+ARG DRIVER_VERSION=580.95.05
 ENV DRIVER_VERSION=$DRIVER_VERSION
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -90,6 +90,6 @@ COPY ${PUBLIC_KEY} kernel/pubkey.x509
 # Add NGC DL license from the CUDA image
 RUN mkdir /licenses && mv /NGC-DL-CONTAINER-LICENSE /licenses/NGC-DL-CONTAINER-LICENSE
 
-ENV CC gcc-12
+ENV CC gcc-14
 
 ENTRYPOINT ["nvidia-driver"]
