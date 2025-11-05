@@ -82,7 +82,7 @@ _is_flatcar() {
 
 
 _fetch_flatcar_modules() {
-    local versionid=$1
+    local versionid=${1-}
     if [ -z "$versionid" ]; then
       versionid=$(. /host-etc/os-release; echo $VERSION_ID)
     fi
@@ -124,7 +124,7 @@ _fetch_flatcar_modules_host() {
 _install_prerequisites() {
     if [ -n "${FLATCAR_VERSION}" ]; then
       _fetch_flatcar_modules "${FLATCAR_VERSION}"
-    elif is_flatcar; then
+    elif _is_flatcar; then
       _fetch_flatcar_modules_host
     else
       _fetch_flatcar_modules

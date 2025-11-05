@@ -7,6 +7,8 @@ ENV NVIDIA_VISIBLE_DEVICES=void
 ARG TARGETARCH
 ENV TARGETARCH=$TARGETARCH
 
+SHELL ["/bin/bash", "-c"]
+
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
