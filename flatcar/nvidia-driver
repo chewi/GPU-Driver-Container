@@ -160,6 +160,8 @@ _kernel_requires_package() {
 
 # Compile the kernel modules, optionally sign them, and generate a precompiled package for use later.
 _create_driver_package() {
+    return 0 # Currently broken on Flatcar.
+
     local pkg_name="nvidia-modules-${KERNEL_VERSION%%-*}${PACKAGE_TAG:+-${PACKAGE_TAG}}"
     local nvidia_sign_args=""
     local nvidia_modeset_sign_args=""
@@ -288,7 +290,11 @@ _install_driver() {
     if [ "${ACCEPT_LICENSE}" = "yes" ]; then
         install_args+=("--accept-license")
     fi
-    IGNORE_CC_MISMATCH=1 nvidia-installer --kernel-name "${KERNEL_VERSION}" --kernel-module-only --no-drm --ui=none --no-nouveau-check -m=${KERNEL_TYPE} ${install_args[@]+"${install_args[@]}"}
+    if [ "${KERNEL_VERSION}" != "$(uname -r)" ]; then
+        # Passing this arg prevents use of a precompiled package.
+        install_args+=(--kernel-name "${KERNEL_VERSION}")
+    fi
+    IGNORE_CC_MISMATCH=1 nvidia-installer --kernel-module-only --no-drm --ui=none --no-nouveau-check -m=${KERNEL_TYPE} ${install_args[@]+"${install_args[@]}"}
 }
 
 # Execute binaries by root owning them first
