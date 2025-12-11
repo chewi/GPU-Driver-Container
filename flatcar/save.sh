@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -x
+set -xeuo pipefail
 
-DRIVER_VERSION=535.161.07
+: ${DRIVER_VERSION:="$(sed -n "s/^ARG DRIVER_VERSION=//p" Dockerfile)"}
 . /etc/os-release
 
 docker commit \
